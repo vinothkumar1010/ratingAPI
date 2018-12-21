@@ -1,0 +1,22 @@
+{
+  "name": "resetapi-for-rating-app",
+  "version": "1.0.0",
+  "description": "we are using this api to get and use the data from the backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vinoth Kumar",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "^5.4.0",
+    "morgan": "^1.9.1"
+  }
+}
