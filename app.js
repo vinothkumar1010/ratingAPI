@@ -6,7 +6,6 @@ const apiroutes       = require('./routes');
 const db              =require('./db')
 const bodyParser      = require('body-parser');
 const config          = require('./config'); 
-const routes          = require('./routes')
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

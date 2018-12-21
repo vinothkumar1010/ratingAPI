@@ -3,7 +3,8 @@
 const router=require('express').Router();
 
 var User = require('../models/User/User');
-
+var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
+const config          = require('../config'); 
 // CREATES A NEW USER
 router.post('/createAccount', function (req, res) {
     User.create({
@@ -16,6 +17,7 @@ router.post('/createAccount', function (req, res) {
         });
 });
 // check user is a valid user or not
+//https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens
 router.post('/authenticate', function (req, res) {
     console.log("********************");
     User.findOne({
@@ -38,8 +40,9 @@ router.post('/authenticate', function (req, res) {
         // we don't want to pass in the entire user since that has the password
         const payload = {
           admin: user.admin     };
-            var token = jwt.sign(payload, app.get('superSecret'), {
-              expiresInMinutes: 1440 // expires in 24 hours
+          
+            var token = jwt.sign(payload, config.secret, {
+                expiresIn: "1d" // expires in 24 hours
             });
     
             // return the information including token as JSON
@@ -62,7 +65,7 @@ router.use(function(req, res, next) {
     if (token) {
   
       // verifies secret and checks exp
-      jwt.verify(token, app.get('superSecret'), function(err, decoded) {       if (err) {
+      jwt.verify(token, config.secret, function(err, decoded) {       if (err) {
           return res.json({ success: false, message: 'Failed to authenticate token.' });       } else {
           // if everything is good, save to request for use in other routes
           req.decoded = decoded;         next();
