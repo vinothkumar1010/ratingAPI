@@ -5,6 +5,7 @@ const router=require('express').Router();
 var User = require('../models/User/User');
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 const config          = require('../config'); 
+
 // CREATES A NEW USER
 router.post('/createAccount', function (req, res) {
     User.create({
