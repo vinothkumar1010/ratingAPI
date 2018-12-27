@@ -7,5 +7,8 @@ var UserSchema = new mongoose.Schema({
   doj: { type: Date, default: Date.now() },
   user_id: { type: Number, unique: true }
 });
-mongoose.model("users", UserSchema);
-module.exports = mongoose.model("users");
+UserSchema.pre("save", function(next) {
+  autoincremental(model, this, next);
+});
+const model = mongoose.model("users", UserSchema);
+module.exports = model;

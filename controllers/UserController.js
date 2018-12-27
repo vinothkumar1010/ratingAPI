@@ -45,6 +45,11 @@ router.post("/authenticate", function(req, res) {
             success: false,
             message: "Authentication failed. Wrong password."
           });
+        } else if (user.active === false) {
+          res.json({
+            success: false,
+            message: "not active user"
+          });
         } else {
           // if user is found and password is right
           // create a token with only our given payload
@@ -56,12 +61,14 @@ router.post("/authenticate", function(req, res) {
           var token = jwt.sign(payload, config.secret, {
             expiresIn: "1d" // expires in 24 hours
           });
-
+          console.log(user);
           // return the information including token as JSON
           res.json({
             success: true,
             message: "Enjoy your token!",
-            token: token
+            token: token,
+            userName: user.name,
+            userid: user.user_id
           });
         }
       }
