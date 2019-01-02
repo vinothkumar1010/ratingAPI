@@ -7,6 +7,16 @@ const config = require("../config");
 
 // CREATES A NEW USER
 router.post("/createAccount", function(req, res) {
+  /* User.findOne(
+    {
+      email: req.body.email
+    },
+    function(err, user) {
+      if (err) throw err;
+      console.log(user);
+      if (!user) {
+      }
+    }); */
   User.create(
     {
       name: req.body.name,

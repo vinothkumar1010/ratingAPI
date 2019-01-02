@@ -26,7 +26,7 @@ router.post("/addNewMovie", function(req, res) {
   );
 });
 router.get("/movieslider", function(req, res) {
-  Movies.find({})
+  Movies.find({"released":true})
     .sort({ release_date: -1 })
     .limit(3)
     .exec(function(err, movies) {

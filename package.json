@@ -4,7 +4,7 @@
   "description": "we are using this api to get and use the data from the backend",
   "main": "index.js",
   "scripts": {
-    "api": "./node_modules/nodemon/bin/nodemon.js server.js",
+    "api": "nodemon server.js --exec ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Vinoth Kumar",
