@@ -4,10 +4,11 @@ const router = require("express").Router();
 var User = require("../models/User/User");
 var jwt = require("jsonwebtoken"); // used to create, sign, and verify tokens
 const config = require("../config");
+var transporter=require("../helpers/transport")
 
 // CREATES A NEW USER
 router.post("/createAccount", function(req, res) {
-  /* User.findOne(
+   User.findOne(
     {
       email: req.body.email
     },
@@ -15,9 +16,41 @@ router.post("/createAccount", function(req, res) {
       if (err) throw err;
       console.log(user);
       if (!user) {
+        console.log("Creating a new account");
+        User.create(
+          {
+            name: req.body.name,
+            email: req.body.email
+          },
+          function(err, user) {
+            console.log(err);
+            if (err)
+              return res
+                .status(500)
+                .send("There was a problem adding the information to the database.");
+                mailOptions={
+                  to : "itsvinoth59@gmil.com",
+                  subject : "Please confirm your Email account",
+                  html : "Hello,<br> Please Click on the link to verify your email.<br><a href=''>Click here to verify</a>" 
+              }
+                transporter.sendMail(mailOptions, function(error, info) {
+                  if (error) {
+                      //Error
+                  } else {
+                    res.status(200).send(user);
+                  }
+              });
+            
+          }
+        );
+      }else if (user) {
+        res.json({
+          success: false,
+          message: "User exists already !!!"
+        });
       }
-    }); */
-  User.create(
+    }); 
+ /*  User.create(
     {
       name: req.body.name,
       email: req.body.email
@@ -29,7 +62,7 @@ router.post("/createAccount", function(req, res) {
           .send("There was a problem adding the information to the database.");
       res.status(200).send(user);
     }
-  );
+  ); */
 });
 // check user is a valid user or not
 //https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens

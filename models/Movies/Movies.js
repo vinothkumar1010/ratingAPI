@@ -1,10 +1,10 @@
 var mongoose = require("mongoose");
 const autoincremental = require("../../helpers/autoincrement");
-var CounterSchema = new mongoose.Schema({
+/* var CounterSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   seq: { type: Number, default: 1 }
 });
-var counter = mongoose.model("counter", CounterSchema);
+var counter = mongoose.model("counter", CounterSchema); */
 
 var MovieSchema = new mongoose.Schema({
   id: { type: Number, unique: true, default: 1 },
@@ -16,7 +16,7 @@ var MovieSchema = new mongoose.Schema({
   poster: String
 });
 MovieSchema.pre("save", function(next) {
-  autoincremental(model, this, next);
+  autoincremental(model, this, next,"id");
   // Arguments:
   // model: The model const here below
   // this: The schema, the body of the document you wan to save
