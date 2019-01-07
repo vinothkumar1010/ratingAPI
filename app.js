@@ -7,7 +7,7 @@ const apiroutes       = require('./routes');
 const db              =require('./db')
 const bodyParser      = require('body-parser');
 const config          = require('./config'); 
-
+require('dotenv').config()
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));

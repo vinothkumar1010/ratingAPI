@@ -25,21 +25,33 @@ router.post("/createAccount", function(req, res) {
           function(err, user) {
             console.log(err);
             if (err)
+            {
               return res
                 .status(500)
                 .send("There was a problem adding the information to the database.");
-                mailOptions={
-                  to : "itsvinoth59@gmil.com",
+            }
+            else
+            {
+              console.log("We are going to send an email");
+              console.log(transporter);
+              mailOptions={
+                  to : req.body.email,
                   subject : "Please confirm your Email account",
                   html : "Hello,<br> Please Click on the link to verify your email.<br><a href=''>Click here to verify</a>" 
-              }
+                }
                 transporter.sendMail(mailOptions, function(error, info) {
                   if (error) {
-                      //Error
+                    console.log('Got an error', error);
+                    return res
+                      .status(500)
+                      .send("There was a problem sending an email.");
                   } else {
+                    console.log('Sent email', info);
                     res.status(200).send(user);
                   }
               });
+            }
+                
             
           }
         );

@@ -1,3 +1,4 @@
+
 var mailer = require('nodemailer');
 
 var mailConfig = {
@@ -19,4 +20,4 @@ var smtpConfig = {
 
 var transporter = mailer.createTransport(smtpConfig);
 
-module.exports = transporter;
+module.exports = transporter;  
