@@ -4,11 +4,11 @@ const router = require("express").Router();
 var User = require("../models/User/User");
 var jwt = require("jsonwebtoken"); // used to create, sign, and verify tokens
 const config = require("../config");
-var transporter=require("../helpers/transport")
+var transporter = require("../helpers/transport");
 
 // CREATES A NEW USER
 router.post("/createAccount", function(req, res) {
-   User.findOne(
+  User.findOne(
     {
       email: req.body.email
     },
@@ -17,52 +17,64 @@ router.post("/createAccount", function(req, res) {
       console.log(user);
       if (!user) {
         console.log("Creating a new account");
+        let crypto;
+        try {
+          crypto = require("crypto");
+          var token = crypto.randomBytes(256);
+        } catch (err) {
+          console.log("crypto support is disabled!");
+          return res.status(500).send("There was a problem sending an email.");
+        }
         User.create(
           {
             name: req.body.name,
-            email: req.body.email
+            email: req.body.email,
+            token: token.toString("hex")
           },
           function(err, user) {
             console.log(err);
-            if (err)
-            {
+            if (err) {
               return res
                 .status(500)
-                .send("There was a problem adding the information to the database.");
-            }
-            else
-            {
+                .send(
+                  "There was a problem adding the information to the database."
+                );
+            } else {
               console.log("We are going to send an email");
               console.log(transporter);
-              mailOptions={
-                  to : req.body.email,
-                  subject : "Please confirm your Email account",
-                  html : "Hello,<br> Please Click on the link to verify your email.<br><a href=''>Click here to verify</a>" 
+
+              mailOptions = {
+                from: "registration@mydomain.com",
+                to: req.body.email,
+                subject: "Please confirm your Email account",
+                html:
+                  "Hello,<br> Please Click on the link to verify your email.<br><a href='" +
+                  token +
+                  "'>Click here to verify</a>"
+              };
+              transporter.sendMail(mailOptions, function(error, info) {
+                if (error) {
+                  console.log("Got an error", error);
+                  return res
+                    .status(500)
+                    .send("There was a problem sending an email.");
+                } else {
+                  console.log("Sent email", info);
+                  res.status(200).send(user);
                 }
-                transporter.sendMail(mailOptions, function(error, info) {
-                  if (error) {
-                    console.log('Got an error', error);
-                    return res
-                      .status(500)
-                      .send("There was a problem sending an email.");
-                  } else {
-                    console.log('Sent email', info);
-                    res.status(200).send(user);
-                  }
               });
             }
-                
-            
           }
         );
-      }else if (user) {
+      } else if (user) {
         res.json({
           success: false,
           message: "User exists already !!!"
         });
       }
-    }); 
- /*  User.create(
+    }
+  );
+  /*  User.create(
     {
       name: req.body.name,
       email: req.body.email

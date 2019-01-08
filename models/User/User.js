@@ -6,11 +6,11 @@ var UserSchema = new mongoose.Schema({
   password: String,
   active: Boolean,
   doj: { type: Date, default: Date.now() },
-  user_id: { type: Number, unique: true, default: 1 }
+  user_id: { type: Number, unique: true, default: 1 },
+  token: String
 });
 UserSchema.pre("save", function(next) {
-  autoincremental(model, this, next,"user_id");
+  autoincremental(model, this, next, "user_id");
 });
 const model = mongoose.model("users", UserSchema);
 module.exports = model;
-
